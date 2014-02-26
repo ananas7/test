@@ -344,7 +344,7 @@ Begin VB.Form Calc
       Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Arial"
-         Size            =   20.25
+         Size            =   18
          Charset         =   204
          Weight          =   700
          Underline       =   0   'False
@@ -369,6 +369,7 @@ Dim a As Double
 Dim b As Double
 Dim s As String
 Dim buf1 As String
+Dim buf2 As String
 Dim buf As Double
 Dim point1 As Boolean
 Dim flag As Boolean
@@ -377,6 +378,7 @@ Dim zero As Boolean
 Dim die As Boolean
 Dim change1 As Boolean
 Dim equal1 As Boolean
+Dim full As Boolean
 
 Private Sub change_Click(Index As Integer)
     If change1 Then
@@ -394,6 +396,7 @@ Private Sub delete2_Click(Index As Integer)
     number = False
     die = False
     change1 = False
+    full = False
 End Sub
 
 Private Sub equal_Click(Index As Integer)
@@ -419,13 +422,14 @@ Private Sub equal_Click(Index As Integer)
     number = False
     point1 = False
     zero = False
+    full = False
     If Not (die) Then
         a = text1.Text
     End If
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
-    Debug.Print (KeyAscii)
+    Debug.Print KeyAscii
     If (Chr(KeyAscii) = "0") Then
         number0_Click (0)
     ElseIf (Chr(KeyAscii) = "1") Then
@@ -454,131 +458,223 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
         sign3_Click (0)
     ElseIf (Chr(KeyAscii) = "/") Then
         sign4_Click (0)
+    ElseIf (Chr(KeyAscii) = "," Or KeyAscii = 110) Then
+        point_Click (0)
     ElseIf (Chr(KeyAscii) = "=" Or KeyAscii = 13) Then
         equal_Click (0)
-    ElseIf KeyAscii = 8 Or KeyAscii = 127 Then
+    ElseIf (KeyAscii = 8 Or KeyAscii = 46) Then
         delete2_Click (0)
-    ElseIf Chr(KeyAscii) = "," Or KeyAscii = 46 Then
-        point_Click (0)
-    ElseIf KeyAscii = 120 Then
-        change_Click (0)
     End If
     KeyAscii = 0
 End Sub
 
 
+Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+    If KeyCode = 120 Then
+        change_Click (0)
+    End If
+    KeyCode = 0
+End Sub
+
 Private Sub number0_Click(Index As Integer)
     zero = True
-    If (number) Then
-        text1.Text = text1.Text & "0"
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
-    If (flag) Then
-        text1.Text = "0"
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "0"
+        End If
+        If (flag) Then
+            text1.Text = "0"
+        End If
     End If
 End Sub
 
 Private Sub number1_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "1"
-    Else
-        text1.Text = "1"
-        number = True
+buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
+    End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "1"
+        Else
+            text1.Text = "1"
+            number = True
+        End If
     End If
     change1 = True
 End Sub
 
-Private Sub KeyPress(KeyAscii As Integer)
-    If KeyAscii = Asc("0") Then
-    Debug.Print KeyAscii
-        number0_Click
-    ElseIf KeyAscii = Asc("1") Then
-        number1_Click
-    ElseIf KeyAscii = Asc("2") Then
-        number2_Click
-    ElseIf KeyAscii = Asc("3") Then
-        number3_Click
-    End If
-    KeyAscii = 0
-End Sub
-
 Private Sub number2_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "2"
-    Else
-        text1.Text = "2"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "2"
+        Else
+            text1.Text = "2"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number3_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "3"
-    Else
-        text1.Text = "3"
-        number = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
+    End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "3"
+        Else
+            text1.Text = "3"
+            number = True
+        End If
     End If
     change1 = True
 End Sub
 
 Private Sub number4_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "4"
-    Else
-        text1.Text = "4"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "4"
+        Else
+            text1.Text = "4"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number5_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "5"
-    Else
-        text1.Text = "5"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "5"
+        Else
+            text1.Text = "5"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number6_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "6"
-    Else
-        text1.Text = "6"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "6"
+        Else
+            text1.Text = "6"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number7_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "7"
-    Else
-        text1.Text = "7"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "7"
+        Else
+            text1.Text = "7"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number8_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "8"
-    Else
-        text1.Text = "8"
-        number = True
-        change1 = True
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "8"
+        Else
+            text1.Text = "8"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub number9_Click(Index As Integer)
-    If (number) Then
-        text1.Text = text1.Text & "9"
-    Else
-        text1.Text = "9"
-        number = True
-        change1 = True
+    Dim point2 As String
+    buf1 = text1.Text
+    buf = CDbl(buf1)
+    buf2 = buf
+    point2 = Right(buf1, 1)
+    If (buf1 <> buf2 And point2 <> ",") Then
+        full = True
+        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
     End If
+    If Not (full) Then
+        If (number) Then
+            text1.Text = text1.Text & "9"
+        Else
+            text1.Text = "9"
+            number = True
+        End If
+    End If
+    change1 = True
 End Sub
 
 Private Sub point_Click(Index As Integer)
@@ -598,6 +694,10 @@ Private Sub point_Click(Index As Integer)
 End Sub
 
 Private Sub sign1_Click(Index As Integer)
+    If (equal1 And (number Or zero)) Then
+        a = text1.Text
+        flag = False
+    End If
     Dim press As Boolean
     press = zero Or number
     press = press And flag
@@ -625,6 +725,7 @@ Private Sub sign1_Click(Index As Integer)
     zero = False
     change1 = False
     equal1 = True
+    full = False
     If Not (die) Then
         a = text1.Text
     End If
@@ -658,6 +759,7 @@ Private Sub sign2_Click(Index As Integer)
     zero = False
     change1 = False
     equal1 = True
+    full = False
     If Not (die) Then
         a = text1.Text
     End If
@@ -691,6 +793,7 @@ Private Sub sign3_Click(Index As Integer)
     zero = False
     change1 = False
     equal1 = True
+    full = False
     If Not (die) Then
         a = text1.Text
     End If
@@ -724,8 +827,8 @@ Private Sub sign4_Click(Index As Integer)
     zero = False
     change1 = False
     equal1 = True
+    full = False
     If Not (die) Then
         a = text1.Text
     End If
 End Sub
-
