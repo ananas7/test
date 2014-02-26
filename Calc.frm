@@ -341,7 +341,6 @@ Begin VB.Form Calc
    End
    Begin VB.TextBox text1 
       BackColor       =   &H8000000E&
-      Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   18
@@ -429,6 +428,7 @@ Private Sub equal_Click(Index As Integer)
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
+    text1.SetFocus
     Debug.Print KeyAscii
     If (Chr(KeyAscii) = "0") Then
         number0_Click (0)
