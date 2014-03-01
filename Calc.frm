@@ -340,7 +340,7 @@ Begin VB.Form Calc
       Width           =   735
    End
    Begin VB.TextBox text1 
-      BackColor       =   &H8000000E&
+      BackColor       =   &H80000004&
       BeginProperty Font 
          Name            =   "Arial"
          Size            =   18
@@ -350,7 +350,6 @@ Begin VB.Form Calc
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H80000014&
       Height          =   855
       Left            =   120
       TabIndex        =   18
@@ -382,8 +381,14 @@ Dim full As Boolean
 Private Sub change_Click(Index As Integer)
     If change1 Then
         buf = text1.Text
+        buf1 = text1.Text
         buf = -buf
-        text1.Text = buf
+        point2 = Right(buf1, 1)
+        If point2 = "," Then
+            text1.Text = buf & ","
+        Else
+            text1.Text = buf
+        End If
     End If
 End Sub
 
