@@ -6,13 +6,13 @@ Begin VB.Form Calc
    ClientHeight    =   4470
    ClientLeft      =   2865
    ClientTop       =   2175
-   ClientWidth     =   4350
+   ClientWidth     =   4320
    FillColor       =   &H000000FF&
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   4470
-   ScaleWidth      =   4350
+   ScaleWidth      =   4320
    Begin VB.CommandButton point 
       Caption         =   "."
       BeginProperty Font 
@@ -25,7 +25,7 @@ Begin VB.Form Calc
          Strikethrough   =   0   'False
       EndProperty
       Height          =   735
-      Index           =   17
+      Index           =   15
       Left            =   3480
       TabIndex        =   17
       Top             =   3600
@@ -43,7 +43,7 @@ Begin VB.Form Calc
          Strikethrough   =   0   'False
       EndProperty
       Height          =   735
-      Index           =   16
+      Index           =   14
       Left            =   3480
       TabIndex        =   16
       Top             =   2760
@@ -61,13 +61,13 @@ Begin VB.Form Calc
          Strikethrough   =   0   'False
       EndProperty
       Height          =   735
-      Index           =   15
+      Index           =   16
       Left            =   3480
       TabIndex        =   15
       Top             =   1920
       Width           =   735
    End
-   Begin VB.CommandButton equal 
+   Begin VB.CommandButton sign 
       Caption         =   "="
       BeginProperty Font 
          Name            =   "Arial"
@@ -79,13 +79,13 @@ Begin VB.Form Calc
          Strikethrough   =   0   'False
       EndProperty
       Height          =   735
-      Index           =   14
+      Index           =   17
       Left            =   3480
       TabIndex        =   14
       Top             =   1080
       Width           =   735
    End
-   Begin VB.CommandButton sign4 
+   Begin VB.CommandButton sign 
       Caption         =   "/"
       BeginProperty Font 
          Name            =   "Arial"
@@ -103,7 +103,7 @@ Begin VB.Form Calc
       Top             =   3600
       Width           =   735
    End
-   Begin VB.CommandButton sign3 
+   Begin VB.CommandButton sign 
       Caption         =   "*"
       BeginProperty Font 
          Name            =   "Arial"
@@ -121,7 +121,7 @@ Begin VB.Form Calc
       Top             =   2760
       Width           =   735
    End
-   Begin VB.CommandButton sign2 
+   Begin VB.CommandButton sign 
       Caption         =   "-"
       BeginProperty Font 
          Name            =   "Arial"
@@ -139,7 +139,7 @@ Begin VB.Form Calc
       Top             =   1920
       Width           =   735
    End
-   Begin VB.CommandButton sign1 
+   Begin VB.CommandButton sign 
       Caption         =   "+"
       BeginProperty Font 
          Name            =   "Arial"
@@ -157,7 +157,7 @@ Begin VB.Form Calc
       Top             =   1080
       Width           =   735
    End
-   Begin VB.CommandButton number0 
+   Begin VB.CommandButton number 
       Caption         =   "0"
       BeginProperty Font 
          Name            =   "Arial"
@@ -175,7 +175,7 @@ Begin VB.Form Calc
       Top             =   3600
       Width           =   2415
    End
-   Begin VB.CommandButton number9 
+   Begin VB.CommandButton number 
       Caption         =   "9"
       BeginProperty Font 
          Name            =   "Arial"
@@ -193,7 +193,7 @@ Begin VB.Form Calc
       Top             =   2760
       Width           =   735
    End
-   Begin VB.CommandButton number6 
+   Begin VB.CommandButton number 
       Caption         =   "6"
       BeginProperty Font 
          Name            =   "Arial"
@@ -211,7 +211,7 @@ Begin VB.Form Calc
       Top             =   1920
       Width           =   735
    End
-   Begin VB.CommandButton number3 
+   Begin VB.CommandButton number 
       Caption         =   "3"
       BeginProperty Font 
          Name            =   "Arial"
@@ -229,7 +229,7 @@ Begin VB.Form Calc
       Top             =   1080
       Width           =   735
    End
-   Begin VB.CommandButton number8 
+   Begin VB.CommandButton number 
       Caption         =   "8"
       BeginProperty Font 
          Name            =   "Arial"
@@ -247,7 +247,7 @@ Begin VB.Form Calc
       Top             =   2760
       Width           =   735
    End
-   Begin VB.CommandButton number7 
+   Begin VB.CommandButton number 
       Caption         =   "7"
       BeginProperty Font 
          Name            =   "Arial"
@@ -265,7 +265,7 @@ Begin VB.Form Calc
       Top             =   2760
       Width           =   735
    End
-   Begin VB.CommandButton number5 
+   Begin VB.CommandButton number 
       Caption         =   "5"
       BeginProperty Font 
          Name            =   "Arial"
@@ -283,7 +283,7 @@ Begin VB.Form Calc
       Top             =   1920
       Width           =   735
    End
-   Begin VB.CommandButton number4 
+   Begin VB.CommandButton number 
       Caption         =   "4"
       BeginProperty Font 
          Name            =   "Arial"
@@ -301,7 +301,7 @@ Begin VB.Form Calc
       Top             =   1920
       Width           =   735
    End
-   Begin VB.CommandButton number2 
+   Begin VB.CommandButton number 
       Caption         =   "2"
       BeginProperty Font 
          Name            =   "Arial"
@@ -319,7 +319,7 @@ Begin VB.Form Calc
       Top             =   1080
       Width           =   735
    End
-   Begin VB.CommandButton number1 
+   Begin VB.CommandButton number 
       BackColor       =   &H80000008&
       Caption         =   "1"
       BeginProperty Font 
@@ -366,107 +366,45 @@ Attribute VB_Exposed = False
 Dim a As Double
 Dim b As Double
 Dim s As String
+Dim press As Boolean
 Dim buf1 As String
-Dim buf2 As String
 Dim buf As Double
-Dim point1 As Boolean
-Dim flag As Boolean
-Dim number As Boolean
-Dim zero As Boolean
-Dim die As Boolean
-Dim change1 As Boolean
 Dim equal1 As Boolean
-Dim full As Boolean
+Dim die As Boolean
+Dim press1 As Boolean
+Dim number1 As Boolean
+
 
 Private Sub change_Click(Index As Integer)
-    If change1 Then
-        buf = text1.Text
+   If Not die Then
         buf1 = text1.Text
-        buf = -buf
+        buf = -CDbl(buf1)
         point2 = Right(buf1, 1)
         If point2 = "," Then
             text1.Text = buf & ","
         Else
             text1.Text = buf
         End If
+        number1 = True
     End If
 End Sub
-
 
 Private Sub delete2_Click(Index As Integer)
     text1.Text = "0"
-    point1 = False
-    flag = False
-    number = False
+    s = ""
     die = False
-    change1 = False
-    full = False
-End Sub
-
-Private Sub equal_Click(Index As Integer)
-    If (equal1) Then
-        b = text1.Text
-    End If
-    If s = "+" Then
-        text1.Text = a + b
-    ElseIf s = "-" Then
-        text1.Text = a - b
-    ElseIf s = "*" Then
-        text1.Text = a * b
-    ElseIf s = "/" Then
-        If b = 0 Then
-            text1.Text = "You die, bustard!!"
-            die = True
-        Else
-            text1.Text = a / b
-        End If
-    End If
+    press = False
     equal1 = False
-    flag = True
-    number = False
-    point1 = False
-    zero = False
-    full = False
-    If Not (die) Then
-        a = text1.Text
-    End If
+    number1 = False
+    a = 0
+    b = 0
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
     text1.SetFocus
     Debug.Print KeyAscii
-    If (Chr(KeyAscii) = "0") Then
-        number0_Click (0)
-    ElseIf (Chr(KeyAscii) = "1") Then
-        number1_Click (0)
-    ElseIf (Chr(KeyAscii) = "2") Then
-        number2_Click (0)
-    ElseIf (Chr(KeyAscii) = "3") Then
-        number3_Click (0)
-    ElseIf (Chr(KeyAscii) = "4") Then
-        number4_Click (0)
-    ElseIf (Chr(KeyAscii) = "5") Then
-        number5_Click (0)
-    ElseIf (Chr(KeyAscii) = "6") Then
-        number6_Click (0)
-    ElseIf (Chr(KeyAscii) = "7") Then
-        number7_Click (0)
-    ElseIf (Chr(KeyAscii) = "8") Then
-        number8_Click (0)
-    ElseIf (Chr(KeyAscii) = "9") Then
-        number9_Click (0)
-    ElseIf (Chr(KeyAscii) = "+") Then
-        sign1_Click (0)
-    ElseIf (Chr(KeyAscii) = "-") Then
-        sign2_Click (0)
-    ElseIf (Chr(KeyAscii) = "*") Then
-        sign3_Click (0)
-    ElseIf (Chr(KeyAscii) = "/") Then
-        sign4_Click (0)
-    ElseIf (Chr(KeyAscii) = "," Or KeyAscii = 110) Then
-        point_Click (0)
-    ElseIf (Chr(KeyAscii) = "=" Or KeyAscii = 13) Then
-        equal_Click (0)
+    If (Chr(KeyAscii) >= "0" And Chr(KeyAscii) <= "9") Then
+        number_Click (Int(Chr(KeyAscii)))
     ElseIf (KeyAscii = 8 Or KeyAscii = 46) Then
         delete2_Click (0)
     End If
@@ -475,365 +413,99 @@ End Sub
 
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
-    If KeyCode = 120 Then
-        change_Click (0)
+    Debug.Print KeyCode
+    If KeyCode = 46 Then
+        delete2_Click (0)
     End If
     KeyCode = 0
 End Sub
 
-Private Sub number0_Click(Index As Integer)
-    zero = True
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "0"
-        End If
-        If (flag) Then
+Private Sub number_Click(Index As Integer)
+    If Not die Then
+        If press And Not equal1 Then
             text1.Text = "0"
+            press = False
         End If
+        If text1.Text = "0" Then
+            text1.Text = ""
+        End If
+        buf1 = text1.Text & number(Index).Caption
+        If buf1 = CStr(CDbl(buf1)) Then
+            text1.Text = text1.Text & number(Index).Caption
+        End If
+        number1 = True
     End If
 End Sub
 
-Private Sub number1_Click(Index As Integer)
-buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "1"
-        Else
-            text1.Text = "1"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number2_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "2"
-        Else
-            text1.Text = "2"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number3_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "3"
-        Else
-            text1.Text = "3"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number4_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "4"
-        Else
-            text1.Text = "4"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number5_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "5"
-        Else
-            text1.Text = "5"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number6_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "6"
-        Else
-            text1.Text = "6"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number7_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "7"
-        Else
-            text1.Text = "7"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number8_Click(Index As Integer)
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "8"
-        Else
-            text1.Text = "8"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
-
-Private Sub number9_Click(Index As Integer)
-    Dim point2 As String
-    buf1 = text1.Text
-    buf = CDbl(buf1)
-    buf2 = buf
-    point2 = Right(buf1, 1)
-    If (buf1 <> buf2 And point2 <> ",") Then
-        full = True
-        text1.Text = Left(text1.Text, Len(text1.Text) - 1)
-    End If
-    If Not (full) Then
-        If (number) Then
-            text1.Text = text1.Text & "9"
-        Else
-            text1.Text = "9"
-            number = True
-        End If
-    End If
-    change1 = True
-End Sub
 
 Private Sub point_Click(Index As Integer)
-    If Not (point1) Then
-        Dim new1 As Boolean
-        new1 = (numder Or zero) And flag
-        If flag And Not (number Or zero) Then
-            text1.Text = "0,"
-            point1 = True
-            number = True
-        Else
-            text1.Text = text1.Text & ","
-            point1 = True
-            number = True
-        End If
+    buf1 = text1.Text
+    If equal1 Then
+        text1.Text = "0"
+    End If
+    If InStr(1, text1.Text, ",") = 0 And Not die Then
+        text1.Text = text1.Text & ","
     End If
 End Sub
 
-Private Sub sign1_Click(Index As Integer)
-    If (equal1 And (number Or zero)) Then
-        a = text1.Text
-        flag = False
-    End If
-    Dim press As Boolean
-    press = zero Or number
-    press = press And flag
-    If (press) Then
-        b = text1.Text
-        If s = "+" Then
-            text1.Text = a + b
-        ElseIf s = "-" Then
-            text1.Text = a - b
-        ElseIf s = "*" Then
-            text1.Text = a * b
-        ElseIf s = "/" Then
-            If b = 0 Then
-                text1.Text = "You die, bustard!!"
-                die = True
-            Else
-                text1.Text = a / b
-            End If
+Private Sub sign_Click(Index As Integer)
+    If Not die Then
+        If s = "" Then
+            a = text1.Text
+        ElseIf Not equal1 And number1 Then
+            b = text1.Text
         End If
-    End If
-    s = "+"
-    flag = True
-    number = False
-    point1 = False
-    zero = False
-    change1 = False
-    equal1 = True
-    full = False
-    If Not (die) Then
-        a = text1.Text
-    End If
-End Sub
-
-Private Sub sign2_Click(Index As Integer)
-    Dim press As Boolean
-    press = zero Or number
-    press = press And flag
-    If (press) Then
-        b = text1.Text
-        If s = "+" Then
-            text1.Text = a + b
-        ElseIf s = "-" Then
-            text1.Text = a - b
-        ElseIf s = "*" Then
-            text1.Text = a * b
-        ElseIf s = "/" Then
-            If b = 0 Then
-                text1.Text = "You die, bustard!!"
-                die = True
-            Else
-                text1.Text = a / b
+        If Index = 10 Then
+            s = "+"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 0
             End If
-        End If
-    End If
-    s = "-"
-    flag = True
-    number = False
-    point1 = False
-    zero = False
-    change1 = False
-    equal1 = True
-    full = False
-    If Not (die) Then
-        a = text1.Text
-    End If
-End Sub
-
-Private Sub sign3_Click(Index As Integer)
-    Dim press As Boolean
-    press = zero Or number
-    press = press And flag
-    If (press) Then
-        b = text1.Text
-        If s = "+" Then
-            text1.Text = a + b
-        ElseIf s = "-" Then
-            text1.Text = a - b
-        ElseIf s = "*" Then
-            text1.Text = a * b
-        ElseIf s = "/" Then
-            If b = 0 Then
-                text1.Text = "You die, bustard!!"
-                die = True
-            Else
-                text1.Text = a / b
+        ElseIf Index = 11 Then
+            s = "-"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 0
             End If
-        End If
-    End If
-    s = "*"
-    flag = True
-    number = False
-    point1 = False
-    zero = False
-    change1 = False
-    equal1 = True
-    full = False
-    If Not (die) Then
-        a = text1.Text
-    End If
-End Sub
-
-Private Sub sign4_Click(Index As Integer)
-    Dim press As Boolean
-    press = zero Or number
-    press = press And flag
-    If (press) Then
-        b = text1.Text
-        If s = "+" Then
-            text1.Text = a + b
-        ElseIf s = "-" Then
-            text1.Text = a - b
-        ElseIf s = "*" Then
-            text1.Text = a * b
-        ElseIf s = "/" Then
-            If b = 0 Then
-                text1.Text = "You die, bustard!!"
-                die = True
-            Else
-                text1.Text = a / b
+        ElseIf Index = 12 Then
+            s = "*"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 0
             End If
+        ElseIf Index = 13 Then
+            s = "/"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 1
+            End If
+        ElseIf Index = 17 Then
+            equal1 = True
         End If
-    End If
-    s = "/"
-    flag = True
-    number = False
-    point1 = False
-    zero = False
-    change1 = False
-    equal1 = True
-    full = False
-    If Not (die) Then
-        a = text1.Text
+        If number1 Then
+            If s = "+" Then
+                text1.Text = a + b
+            ElseIf s = "-" Then
+                text1.Text = a - b
+            ElseIf s = "*" Then
+                text1.Text = a * b
+            ElseIf s = "/" Then
+                If b <> 0 Then
+                    text1.Text = a / b
+                Else
+                    text1.Text = "YOU DIE BUSTERD!!!"
+                    die = True
+                End If
+            End If
+            If Not die Then
+                a = text1.Text
+            End If
+            number1 = False
+        End If
+        press = True
     End If
 End Sub
