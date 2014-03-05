@@ -6,13 +6,22 @@ Begin VB.Form Calc
    ClientHeight    =   4470
    ClientLeft      =   2865
    ClientTop       =   2175
-   ClientWidth     =   4320
+   ClientWidth     =   5850
    FillColor       =   &H000000FF&
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   4470
-   ScaleWidth      =   4320
+   ScaleWidth      =   5850
+   Begin VB.PictureBox picture1 
+      Height          =   3255
+      Left            =   2640
+      ScaleHeight     =   3195
+      ScaleWidth      =   915
+      TabIndex        =   19
+      Top             =   1080
+      Width           =   975
+   End
    Begin VB.CommandButton point 
       Caption         =   "."
       BeginProperty Font 
@@ -26,10 +35,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   15
-      Left            =   3480
+      Left            =   4800
       TabIndex        =   17
       Top             =   3600
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton change 
       Caption         =   "+-"
@@ -44,10 +53,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   14
-      Left            =   3480
+      Left            =   4800
       TabIndex        =   16
       Top             =   2760
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton delete2 
       Caption         =   "CE"
@@ -62,10 +71,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   16
-      Left            =   3480
+      Left            =   4800
       TabIndex        =   15
       Top             =   1920
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton sign 
       Caption         =   "="
@@ -80,10 +89,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   17
-      Left            =   3480
+      Left            =   4800
       TabIndex        =   14
       Top             =   1080
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton sign 
       Caption         =   "/"
@@ -98,10 +107,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   13
-      Left            =   2640
+      Left            =   3720
       TabIndex        =   13
       Top             =   3600
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton sign 
       Caption         =   "*"
@@ -116,10 +125,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   12
-      Left            =   2640
+      Left            =   3720
       TabIndex        =   12
       Top             =   2760
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton sign 
       Caption         =   "-"
@@ -134,10 +143,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   11
-      Left            =   2640
+      Left            =   3720
       TabIndex        =   11
       Top             =   1920
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton sign 
       Caption         =   "+"
@@ -152,10 +161,10 @@ Begin VB.Form Calc
       EndProperty
       Height          =   735
       Index           =   10
-      Left            =   2640
+      Left            =   3720
       TabIndex        =   10
       Top             =   1080
-      Width           =   735
+      Width           =   975
    End
    Begin VB.CommandButton number 
       Caption         =   "0"
@@ -355,7 +364,7 @@ Begin VB.Form Calc
       TabIndex        =   18
       Text            =   "0"
       Top             =   120
-      Width           =   4095
+      Width           =   5655
    End
 End
 Attribute VB_Name = "Calc"
@@ -373,6 +382,7 @@ Dim equal1 As Boolean
 Dim die As Boolean
 Dim press1 As Boolean
 Dim number1 As Boolean
+Dim delete1 As Boolean
 
 
 Private Sub change_Click(Index As Integer)
@@ -399,6 +409,7 @@ Private Sub delete2_Click(Index As Integer)
     press = False
     equal1 = False
     number1 = False
+    delete1 = True
     a = 0
     b = 0
 End Sub
@@ -408,7 +419,7 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
     Debug.Print KeyAscii
     If (Chr(KeyAscii) >= "0" And Chr(KeyAscii) <= "9") Then
         number_Click (Int(Chr(KeyAscii)))
-    ElseIf (KeyAscii = 8 Or KeyAscii = 46) Then
+    ElseIf (KeyAscii = 8) Then
         delete2_Click (0)
     ElseIf (Chr(KeyAscii) = "+") Then
         sign_Click (10)
@@ -420,7 +431,7 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
         sign_Click (13)
     ElseIf (KeyAscii = 13 Or Chr(KeyAscii) = "=") Then
         sign_Click (17)
-    ElseIf Chr(KeyAscii) = "," Then
+    ElseIf Chr(KeyAscii) = "," Or KeyAscii = 46 Then
         point_Click (0)
     End If
     KeyAscii = 0
@@ -437,22 +448,29 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     KeyCode = 0
 End Sub
 
+Private Sub Form_Load()
+    Show
+    picture1.Picture = LoadPicture("C:\1.jpg")
+End Sub
+
 Private Sub number_Click(Index As Integer)
     If Not die Then
-        If press And Not equal1 Then
+        If press Then
             text1.Text = "0"
             press = False
         End If
         If text1.Text = "0" Then
             text1.Text = ""
         End If
-        buf1 = text1.Text & number(Index).Caption
+        buf1 = text1.Text & "5"
+        
         If buf1 = CStr(CDbl(buf1)) Then
             text1.Text = text1.Text & number(Index).Caption
         End If
         number1 = True
     End If
 End Sub
+
 
 
 Private Sub point_Click(Index As Integer)
@@ -491,7 +509,11 @@ Private Sub sign_Click(Index As Integer)
             If equal1 Then
                 equal1 = False
                 a = text1.Text
-                b = 0
+                b = 1
+            End If
+            If delete1 Then
+                b = 1
+                delete1 = False
             End If
         ElseIf Index = 13 Then
             s = "/"
@@ -500,10 +522,14 @@ Private Sub sign_Click(Index As Integer)
                 a = text1.Text
                 b = 1
             End If
+            If delete1 Then
+                b = 1
+                delete1 = False
+            End If
         ElseIf Index = 17 Then
             equal1 = True
         End If
-        If number1 Then
+        If number1 Or equal1 Then
             If s = "+" Then
                 text1.Text = a + b
             ElseIf s = "-" Then
@@ -525,4 +551,8 @@ Private Sub sign_Click(Index As Integer)
         End If
         press = True
     End If
+End Sub
+
+Private Sub Text2_Change()
+
 End Sub
