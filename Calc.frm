@@ -383,6 +383,7 @@ Dim die As Boolean
 Dim press1 As Boolean
 Dim number1 As Boolean
 Dim delete1 As Boolean
+Dim first As Boolean
 
 
 Private Sub change_Click(Index As Integer)
@@ -398,6 +399,7 @@ Private Sub change_Click(Index As Integer)
         number1 = True
         If equal1 Then
             a = text1.Text
+            s = ""
         End If
     End If
 End Sub
@@ -412,6 +414,7 @@ Private Sub delete2_Click(Index As Integer)
     delete1 = True
     a = 0
     b = 0
+    first = False
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
@@ -455,7 +458,7 @@ End Sub
 
 Private Sub number_Click(Index As Integer)
     If Not die Then
-        If press Then
+        If press And Not number1 Then
             text1.Text = "0"
             press = False
         End If
@@ -463,7 +466,6 @@ Private Sub number_Click(Index As Integer)
             text1.Text = ""
         End If
         buf1 = text1.Text & "5"
-        
         If buf1 = CStr(CDbl(buf1)) Then
             text1.Text = text1.Text & number(Index).Caption
         End If
@@ -471,15 +473,15 @@ Private Sub number_Click(Index As Integer)
     End If
 End Sub
 
-
-
 Private Sub point_Click(Index As Integer)
     buf1 = text1.Text
     If equal1 Then
         text1.Text = "0"
+        s = ""
     End If
     If InStr(1, text1.Text, ",") = 0 And Not die Then
         text1.Text = text1.Text & ","
+        number1 = True
     End If
 End Sub
 
@@ -490,44 +492,29 @@ Private Sub sign_Click(Index As Integer)
         ElseIf Not equal1 And number1 Then
             b = text1.Text
         End If
-        If Index = 10 Then
-            s = "+"
-            If equal1 Then
-                equal1 = False
-                a = text1.Text
-                b = 0
+        If Not first Then
+            If Index = 10 Or Index = 11 Then
+                s = sign(Index).Caption
+                If equal1 Then
+                    equal1 = False
+                    a = text1.Text
+                    b = 0
+                End If
+            ElseIf Index = 12 Or Index = 13 Then
+                s = sign(Index).Caption
+                If equal1 Then
+                    equal1 = False
+                    a = text1.Text
+                    b = 1
+                End If
+                If delete1 Then
+                    b = 1
+                    delete1 = False
+                End If
+            ElseIf Index = 17 Then
+                equal1 = True
             End If
-        ElseIf Index = 11 Then
-            s = "-"
-            If equal1 Then
-                equal1 = False
-                a = text1.Text
-                b = 0
-            End If
-        ElseIf Index = 12 Then
-            s = "*"
-            If equal1 Then
-                equal1 = False
-                a = text1.Text
-                b = 1
-            End If
-            If delete1 Then
-                b = 1
-                delete1 = False
-            End If
-        ElseIf Index = 13 Then
-            s = "/"
-            If equal1 Then
-                equal1 = False
-                a = text1.Text
-                b = 1
-            End If
-            If delete1 Then
-                b = 1
-                delete1 = False
-            End If
-        ElseIf Index = 17 Then
-            equal1 = True
+            first = True
         End If
         If number1 Or equal1 Then
             If s = "+" Then
@@ -550,9 +537,29 @@ Private Sub sign_Click(Index As Integer)
             number1 = False
         End If
         press = True
+        If first Then
+            If Index = 10 Or Index = 11 Then
+                s = sign(Index).Caption
+                If equal1 Then
+                    equal1 = False
+                    a = text1.Text
+                    b = 0
+                End If
+            ElseIf Index = 12 Or Index = 13 Then
+                s = sign(Index).Caption
+                If equal1 Then
+                    equal1 = False
+                    a = text1.Text
+                    b = 1
+                End If
+                If delete1 Then
+                    b = 1
+                    delete1 = False
+                End If
+            ElseIf Index = 17 Then
+                equal1 = True
+                first = False
+            End If
+        End If
     End If
-End Sub
-
-Private Sub Text2_Change()
-
 End Sub
