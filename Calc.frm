@@ -386,6 +386,9 @@ Private Sub change_Click(Index As Integer)
             text1.Text = buf
         End If
         number1 = True
+        If equal1 Then
+            a = text1.Text
+        End If
     End If
 End Sub
 
@@ -407,6 +410,18 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
         number_Click (Int(Chr(KeyAscii)))
     ElseIf (KeyAscii = 8 Or KeyAscii = 46) Then
         delete2_Click (0)
+    ElseIf (Chr(KeyAscii) = "+") Then
+        sign_Click (10)
+    ElseIf (Chr(KeyAscii) = "-") Then
+        sign_Click (11)
+    ElseIf (Chr(KeyAscii) = "*") Then
+        sign_Click (12)
+    ElseIf (Chr(KeyAscii) = "/") Then
+        sign_Click (13)
+    ElseIf (KeyAscii = 13 Or Chr(KeyAscii) = "=") Then
+        sign_Click (17)
+    ElseIf Chr(KeyAscii) = "," Then
+        point_Click (0)
     End If
     KeyAscii = 0
 End Sub
@@ -416,6 +431,8 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     Debug.Print KeyCode
     If KeyCode = 46 Then
         delete2_Click (0)
+    ElseIf KeyCode = 120 Then
+        change_Click (0)
     End If
     KeyCode = 0
 End Sub
