@@ -383,7 +383,6 @@ Dim die As Boolean
 Dim press1 As Boolean
 Dim number1 As Boolean
 Dim delete1 As Boolean
-Dim first As Boolean
 
 
 Private Sub change_Click(Index As Integer)
@@ -414,7 +413,6 @@ Private Sub delete2_Click(Index As Integer)
     delete1 = True
     a = 0
     b = 0
-    first = False
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
@@ -451,10 +449,7 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     KeyCode = 0
 End Sub
 
-Private Sub Form_Load()
-    Show
-    picture1.Picture = LoadPicture("C:\1.jpg")
-End Sub
+
 
 Private Sub number_Click(Index As Integer)
     If Not die Then
@@ -479,6 +474,10 @@ Private Sub point_Click(Index As Integer)
         text1.Text = "0"
         s = ""
     End If
+    If Not number1 And s <> "" Then
+        text1.Text = "0,"
+        number1 = True
+    End If
     If InStr(1, text1.Text, ",") = 0 And Not die Then
         text1.Text = text1.Text & ","
         number1 = True
@@ -491,30 +490,6 @@ Private Sub sign_Click(Index As Integer)
             a = text1.Text
         ElseIf Not equal1 And number1 Then
             b = text1.Text
-        End If
-        If Not first Then
-            If Index = 10 Or Index = 11 Then
-                s = sign(Index).Caption
-                If equal1 Then
-                    equal1 = False
-                    a = text1.Text
-                    b = 0
-                End If
-            ElseIf Index = 12 Or Index = 13 Then
-                s = sign(Index).Caption
-                If equal1 Then
-                    equal1 = False
-                    a = text1.Text
-                    b = 1
-                End If
-                If delete1 Then
-                    b = 1
-                    delete1 = False
-                End If
-            ElseIf Index = 17 Then
-                equal1 = True
-            End If
-            first = True
         End If
         If number1 Or equal1 Then
             If s = "+" Then
@@ -537,29 +512,45 @@ Private Sub sign_Click(Index As Integer)
             number1 = False
         End If
         press = True
-        If first Then
-            If Index = 10 Or Index = 11 Then
-                s = sign(Index).Caption
-                If equal1 Then
-                    equal1 = False
-                    a = text1.Text
-                    b = 0
-                End If
-            ElseIf Index = 12 Or Index = 13 Then
-                s = sign(Index).Caption
-                If equal1 Then
-                    equal1 = False
-                    a = text1.Text
-                    b = 1
-                End If
-                If delete1 Then
-                    b = 1
-                    delete1 = False
-                End If
-            ElseIf Index = 17 Then
-                equal1 = True
-                first = False
+        If Index = 10 Then
+            s = "+"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 0
             End If
+        ElseIf Index = 11 Then
+            s = "-"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 0
+            End If
+        ElseIf Index = 12 Then
+            s = "*"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 1
+            End If
+            If delete1 Then
+                b = 1
+                delete1 = False
+            End If
+        ElseIf Index = 13 Then
+            s = "/"
+            If equal1 Then
+                equal1 = False
+                a = text1.Text
+                b = 1
+            End If
+            If delete1 Then
+                b = 1
+                delete1 = False
+            End If
+        ElseIf Index = 17 Then
+            equal1 = True
         End If
     End If
 End Sub
+
