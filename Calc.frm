@@ -378,15 +378,21 @@ Dim s As String
 Dim press As Boolean
 Dim buf1 As String
 Dim buf As Double
+Dim sum As Boolean
+Dim change1 As Boolean
 Dim equal1 As Boolean
 Dim die As Boolean
 Dim press1 As Boolean
 Dim number1 As Boolean
 Dim delete1 As Boolean
-
+Dim equal2 As Boolean
+Dim first As Boolean
 
 Private Sub change_Click(Index As Integer)
    If Not die Then
+    If Not number1 Then
+        text1.Text = 0
+    Else
         buf1 = text1.Text
         buf = -CDbl(buf1)
         point2 = Right(buf1, 1)
@@ -395,10 +401,8 @@ Private Sub change_Click(Index As Integer)
         Else
             text1.Text = buf
         End If
-        number1 = True
-        If equal1 Then
-            a = text1.Text
-            s = ""
+        a = text1.Text
+        change1 = True
         End If
     End If
 End Sub
@@ -406,11 +410,15 @@ End Sub
 Private Sub delete2_Click(Index As Integer)
     text1.Text = "0"
     s = ""
+    change1 = False
     die = False
     press = False
     equal1 = False
+    equal2 = False
     number1 = False
     delete1 = True
+    first = False
+    sum = False
     a = 0
     b = 0
 End Sub
@@ -438,9 +446,8 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
     KeyAscii = 0
 End Sub
 
-
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
-    Debug.Print KeyCode
+    text1.SetFocus
     If KeyCode = 46 Then
         delete2_Click (0)
     ElseIf KeyCode = 120 Then
@@ -449,13 +456,15 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     KeyCode = 0
 End Sub
 
-
-
 Private Sub number_Click(Index As Integer)
     If Not die Then
         If press And Not number1 Then
-            text1.Text = "0"
+            text1.Text = ""
             press = False
+        End If
+        If change1 And equal1 Then
+            text1.Text = ""
+            chang1 = False
         End If
         If text1.Text = "0" Then
             text1.Text = ""
@@ -465,6 +474,10 @@ Private Sub number_Click(Index As Integer)
             text1.Text = text1.Text & number(Index).Caption
         End If
         number1 = True
+        If equal1 Then
+            first = False
+            sum = False
+        End If
     End If
 End Sub
 
@@ -482,6 +495,10 @@ Private Sub point_Click(Index As Integer)
         text1.Text = text1.Text & ","
         number1 = True
     End If
+    If equal1 Then
+        first = False
+        sum = False
+    End If
 End Sub
 
 Private Sub sign_Click(Index As Integer)
@@ -490,67 +507,108 @@ Private Sub sign_Click(Index As Integer)
             a = text1.Text
         ElseIf Not equal1 And number1 Then
             b = text1.Text
+            first = True
         End If
-        If number1 Or equal1 Then
+        If Index = 17 Then
+            If press And Not number1 And Not equal1 Then
+                b = a
+            End If
+            equal1 = True
+            sum = True
+            equal2 = False
+            first = False
+        End If
+        If Not equal1 And (number1 Or sum) Then
             If s = "+" Then
                 text1.Text = a + b
+                a = text1.Text
             ElseIf s = "-" Then
                 text1.Text = a - b
+                a = text1.Text
             ElseIf s = "*" Then
                 text1.Text = a * b
+                a = text1.Text
             ElseIf s = "/" Then
-                If b <> 0 Then
-                    text1.Text = a / b
-                Else
-                    text1.Text = "YOU DIE BUSTERD!!!"
+                If b = 0 Then
+                    text1.Text = "You DIE busterd!"
                     die = True
+                Else
+                    text1.Text = a / b
+                    a = text1.Text
                 End If
             End If
-            If Not die Then
-                a = text1.Text
-            End If
-            number1 = False
+            equal2 = True
         End If
-        press = True
         If Index = 10 Then
             s = "+"
+            If Not first Then
+                b = 0
+            End If
             If equal1 Then
-                equal1 = False
                 a = text1.Text
                 b = 0
+                equal1 = False
             End If
         ElseIf Index = 11 Then
             s = "-"
-            If equal1 Then
-                equal1 = False
-                a = text1.Text
+            If Not first Then
                 b = 0
             End If
-        ElseIf Index = 12 Then
-            s = "*"
             If equal1 Then
-                equal1 = False
+                b = 0
                 a = text1.Text
+                equal1 = False
+            End If
+        ElseIf Index = 12 Then
+            If Not first Then
                 b = 1
             End If
-            If delete1 Then
+            s = "*"
+            If equal1 And (number1 Or sum) Then
+                a = text1.Text
                 b = 1
-                delete1 = False
+                equal1 = False
             End If
         ElseIf Index = 13 Then
+            If Not first Then
+                b = 1
+            End If
             s = "/"
             If equal1 Then
-                equal1 = False
                 a = text1.Text
                 b = 1
+                equal1 = False
             End If
-            If delete1 Then
-                b = 1
-                delete1 = False
-            End If
-        ElseIf Index = 17 Then
-            equal1 = True
         End If
+        
+        If delete1 Then
+            delete1 = False
+            If s = "*" Or s = "/" Then
+                b = 1
+            End If
+        End If
+        If Not equal2 Then
+            If s = "+" Then
+                text1.Text = a + b
+                a = text1.Text
+            ElseIf s = "-" Then
+                text1.Text = a - b
+                a = text1.Text
+            ElseIf s = "*" Then
+                text1.Text = a * b
+                a = text1.Text
+            ElseIf s = "/" Then
+                If b = 0 Then
+                    text1.Text = "You DIE busterd!"
+                    die = True
+                Else
+                    text1.Text = a / b
+                    a = text1.Text
+                End If
+            End If
+        End If
+        press = True
+        number1 = False
     End If
-End Sub
+    End Sub
 
